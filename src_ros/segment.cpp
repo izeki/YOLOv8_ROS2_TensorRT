@@ -5,7 +5,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
-#include <ament_index_cpp/get_package_prefix.hpp>
+#include <ament_index_cpp/get_package_share_directory.hpp>
 #include <cv_bridge/cv_bridge.h>
 
 
@@ -76,7 +76,16 @@ private:
 RosNode::RosNode() : Node("segment_node")
 {   
     cudaSetDevice(0);
+
+    const std::string package_name = "yolov8_trt";
+    std::string pkg_share_dir = ament_index_cpp::get_package_share_directory(package_name);
     
+    RCLCPP_INFO(rclcpp::get_logger("ros2_package_path_example"), "Package path: %s", pkg_share_dir.c_str());
+    
+    // weight_name_ = "yolov8n-seg.engine";
+    // topic_img_ = "/camera/color/image_raw";
+    // topic_res_img_ = "/segment/image_raw";
+
     this->declare_parameter("topic_img", "/camera/color/image_raw");
     this->get_parameter("topic_img", topic_img_);
 
@@ -86,13 +95,8 @@ RosNode::RosNode() : Node("segment_node")
     this->declare_parameter("weight_name", "yolov8n-seg.engine");
     this->get_parameter("weight_name", weight_name_);
 
-
-    // weight_name_ = "yolov8n-seg.engine";
-    // topic_img_ = "/camera/color/image_raw";
-    // topic_res_img_ = "/segment/image_raw";
     
-    std::string pkg_prefix = ament_index_cpp::get_package_prefix("yolov8_trt");
-    engine_file_path_ = pkg_prefix + "/../../src/YOLOv8-ROS-TensorRT/weights/" + weight_name_;
+    engine_file_path_ = pkg_share_dir + "/../../../../YOLOv8-ROS-TensorRT/weights/" + weight_name_;
 
     std::cout << "\n\033[1;32m--engine_file_path: " << engine_file_path_ << "\033[0m" << std::endl;
     std::cout << "\033[1;32m" << "--topic_img       : " << topic_img_  << "\033[0m" << std::endl;

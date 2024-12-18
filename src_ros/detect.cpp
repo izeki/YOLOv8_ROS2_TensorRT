@@ -94,7 +94,7 @@ RosNode::RosNode() : Node("detect_node")
 
 
 
-    engine_file_path_ = pkg_share_dir + "/../../../../src/YOLOv8-ROS-TensorRT/weights/" + weight_name_;
+    engine_file_path_ = pkg_share_dir + "/../../../../YOLOv8-ROS-TensorRT/weights/" + weight_name_;
 
     std::cout << "\n\033[1;32m--engine_file_path: " << engine_file_path_ << "\033[0m" << std::endl;
     std::cout << "\033[1;32m" << "--topic_img       : " << topic_img_  << "\033[0m" << std::endl;

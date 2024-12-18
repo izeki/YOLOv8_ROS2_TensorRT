@@ -8,7 +8,7 @@ def generate_launch_description():
             executable="pose",
             name='pose',
             output='screen',
-            parameters=[{'topic_img': '/camera/color/image_raw'},
+            parameters=[{'topic_img': '/image_raw'},
                         {'topic_res_img': '/pose/image_raw'},
                         {'weight_name': 'yolov8n-pose.engine'}
                         ]

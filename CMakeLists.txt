@@ -1,23 +1,29 @@
 cmake_minimum_required(VERSION 3.5)
 project(yolov8_trt)
 
+enable_language(CUDA)
+
+
 set(CMAKE_CUDA_ARCHITECTURES 60 61 62 70 72 75 86 89 90)
-set(CMAKE_CUDA_COMPILER /usr/local/cuda/bin/nvcc)
+set(CMAKE_CUDA_COMPILER /usr/local/cuda-12.6/bin/nvcc)
 
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -O3")
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -O3")
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Release)
 
 option(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
 
-set(CUDA_INCLUDE_DIRS /usr/local/cuda/include)
-set(CUDA_LIBRARIES /usr/local/cuda/lib64)
+# set(CUDA_INCLUDE_DIRS /usr/local/cuda/targets/aarch64-linux/include)
+# set(CUDA_LIBRARIES /usr/local/cuda/targets/aarch64-linux/lib)
+
 
 # TensorRT  # TensorRT_ROOT的路径设置成自己的
-set(TensorRT_ROOT /home/lin/software/TensorRT-8.5.3.1)
-set(TensorRT_INCLUDE_DIRS ${TensorRT_ROOT}/include)
-set(TensorRT_LIBRARIES ${TensorRT_ROOT}/targets/x86_64-linux-gnu/lib)
+#set(TensorRT_ROOT /home/lin/software/TensorRT-8.5.3.1)
+#set(TensorRT_INCLUDE_DIRS ${TensorRT_ROOT}/include)
+#set(TensorRT_LIBRARIES ${TensorRT_ROOT}/targets/x86_64-linux-gnu/lib)
+set(TensorRT_INCLUDE_DIRS /usr/include)
+set(TensorRT_LIBRARIES /usr/lib/aarch64-linux-gnu)
 
 # message(STATUS "TensorRT Libs: \n${TensorRT_LIBRARIES}\n")
 # message(STATUS "TensorRT Headers: \n${TensorRT_INCLUDE_DIRS}\n")
@@ -61,7 +67,7 @@ add_executable(detect src_ros/detect.cpp)
 target_link_libraries(detect 
         nvinfer
         nvinfer_plugin
-        cudart
+        ${CUDA_LIBRARIES}
         ${OpenCV_LIBRARIES} 
 )
 
@@ -73,11 +79,11 @@ ament_target_dependencies(detect
 )
 
 add_executable(pose src_ros/pose.cpp)
-target_link_libraries(pose
-        nvinfer 
-        nvinfer_plugin 
-        cudart 
-        ${OpenCV_LIBS}
+target_link_libraries(pose 
+        nvinfer
+        nvinfer_plugin
+        ${CUDA_LIBRARIES}
+        ${OpenCV_LIBRARIES} 
 )
 
 ament_target_dependencies(pose
@@ -91,7 +97,7 @@ add_executable(segment src_ros/segment.cpp)
 target_link_libraries(segment 
         nvinfer 
         nvinfer_plugin 
-        cudart 
+        ${CUDA_LIBRARIES} 
         ${OpenCV_LIBS}
 )
 

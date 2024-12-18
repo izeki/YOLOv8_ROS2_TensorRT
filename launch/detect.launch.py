@@ -7,7 +7,7 @@ def generate_launch_description():
         executable="detect",
         name='detect',
         output='screen',
-        parameters=[{'topic_img': '/camera/color/image_raw'},
+        parameters=[{'topic_img': '/image_raw'},
                     {'topic_res_img': '/detect/image_raw'},
                     {'weight_name': 'yolov8n.engine'}
                     ]
